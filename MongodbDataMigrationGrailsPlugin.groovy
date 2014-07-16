@@ -54,16 +54,7 @@ Brief summary/description of the plugin.
     }
 
     def doWithApplicationContext = { ctx ->
-
-        def grailsApplication = Holders.getGrailsApplication()
-
-        if (grailsApplication.config.grails.plugin.mongodb.datamigration.updateOnStart) {
-            log.info("MongoDB data migration enabled - running migrations....")
-            Runner runner = new Runner()
-            runner.execute()
-        } else {
-            log.info("MongoDB data migration disabled - skipping migrations....")
-        }
+        new Runner()
     }
 
     def onChange = { event ->

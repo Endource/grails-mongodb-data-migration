@@ -30,6 +30,13 @@ class Runner {
         runlist = "classpath:/migrations/datamigration.json"
         migrationsPath = runlist.substring(0, runlist.lastIndexOf("/"))
 
+        if (grailsApplication.config.grails.plugin.mongodb.datamigration.updateOnStart) {
+            log.info("MongoDB data migration enabled - running migrations....")
+            execute()
+        } else {
+            log.info("MongoDB data migration disabled - skipping migrations....")
+        }
+
     }
 
     protected void setRunlist(String runlist) {
