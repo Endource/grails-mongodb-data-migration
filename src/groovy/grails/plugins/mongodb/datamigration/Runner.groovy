@@ -92,7 +92,12 @@ class Runner {
         def slurper = new JsonSlurper()
 
         log.info("Searching run list from ${runlist}")
-        def datamigrationJson = grailsResourceLocator.findResourceForURI(runlist).inputStream.text
+        def datamigrationJson = grailsResourceLocator.findResourceForURI(runlist)?.inputStream?.text
+
+        if (!datamigrationJson) {
+            log.error("Couldn't read runlist from: ${runlist}. No migrations to run.")
+            return []
+        }
 
         def changelogsJson = slurper.parseText(datamigrationJson).changelogs
 

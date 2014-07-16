@@ -72,5 +72,17 @@ class RunnerIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "fail properly if run list can't be found"() {
+
+        given:
+            Runner runner = new Runner()
+            runner.setRunlist("classpath:/resources/a/idontexist.json")
+
+        expect:
+            runner.getChangelogs() == []
+
+        and: "runner executes but doesn't blow up"
+            runner.execute()
+    }
 
 }

@@ -10,3 +10,5 @@
 //
 
 ant.mkdir dir: "$basedir/grails-app/conf/migrations"
+
+ant.copy(file: "${pluginBasedir}/src/resources/datamigration.json", todir: "${basedir}/grails-app/conf/migrations")

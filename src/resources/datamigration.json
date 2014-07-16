@@ -1,0 +1,7 @@
+{
+    "changelogs": [
+
+        { "filename": "[file relative to this runlist file]", "author": "[your name]", "description": "[something telling]", "context": "[the grails.env you want this to run in]"}
+
+    ]
+}

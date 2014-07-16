@@ -6,5 +6,4 @@
         { "filename": "shouldOnlyRunInTest", "author": "shin", "description": "this changelog should only run in grails.env=test", "context": "test"}
 
     ]
-
 }
