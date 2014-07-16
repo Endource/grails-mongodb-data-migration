@@ -1,0 +1,1 @@
+db.cities.insert(name: "Birmingham")
