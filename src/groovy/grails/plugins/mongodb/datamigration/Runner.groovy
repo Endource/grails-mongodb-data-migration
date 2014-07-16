@@ -3,14 +3,9 @@ package grails.plugins.mongodb.datamigration
 import grails.util.Environment
 import grails.util.Holders
 import groovy.json.JsonSlurper
-import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 import org.codehaus.groovy.grails.core.io.ResourceLocator
-import org.codehaus.groovy.grails.io.support.PathMatchingResourcePatternResolver
-import org.codehaus.groovy.grails.io.support.Resource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.lang.reflect.Field
 
 class Runner {
 
@@ -19,7 +14,6 @@ class Runner {
 
     def environment
     def grailsApplication
-    def applicationContext
     ResourceLocator grailsResourceLocator
     def db
 
@@ -89,8 +83,6 @@ class Runner {
         def datamigrationJson = grailsResourceLocator.findResourceForURI(runlist).inputStream.text
 
         def changelogsJson = slurper.parseText(datamigrationJson).changelogs
-
-        println changelogsJson
 
         changelogsJson.each {
 
