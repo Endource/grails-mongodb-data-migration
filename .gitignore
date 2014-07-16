@@ -2,3 +2,4 @@ projectFilesBackup*/
 *.ipr
 *.iml
 *.iws
+target/

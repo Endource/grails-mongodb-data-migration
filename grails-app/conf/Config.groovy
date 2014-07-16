@@ -8,7 +8,7 @@ log4j = {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 
-    info 'grails.plugins.mongodb.datamigration.Runner'
+    debug 'grails.plugins.mongodb.datamigration.Runner'
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -22,3 +22,5 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+grails.plugin.mongodb.datamigration.updateOnStart = false

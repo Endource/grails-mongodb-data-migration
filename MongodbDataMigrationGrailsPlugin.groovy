@@ -1,4 +1,5 @@
 import grails.plugins.mongodb.datamigration.Runner
+import grails.util.Holders
 
 class MongodbDataMigrationGrailsPlugin {
     // the plugin version
@@ -54,9 +55,15 @@ Brief summary/description of the plugin.
 
     def doWithApplicationContext = { ctx ->
 
-        //TODO: if enabled check
-        Runner runner = new Runner()
-        runner.execute()
+        def grailsApplication = Holders.getGrailsApplication()
+
+        if (grailsApplication.config.grails.plugin.mongodb.datamigration.updateOnStart) {
+            log.info("MongoDB data migration enabled - running migrations....")
+            Runner runner = new Runner()
+            runner.execute()
+        } else {
+            log.info("MongoDB data migration disabled - skipping migrations....")
+        }
     }
 
     def onChange = { event ->
