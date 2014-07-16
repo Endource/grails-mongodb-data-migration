@@ -4,6 +4,7 @@ import grails.util.Environment
 import grails.util.Holders
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.core.io.ResourceLocator
+import org.jongo.Jongo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -16,6 +17,7 @@ class Runner {
     def grailsApplication
     ResourceLocator grailsResourceLocator
     def db
+    def mongo
 
     protected Logger log = LoggerFactory.getLogger(getClass())
 
@@ -51,7 +53,9 @@ class Runner {
     protected void invokeChangeLog(ChangeLog changelog) {
 
         Binding binding = new Binding();
+        Jongo jongo = new Jongo(db);
         binding.setVariable("db", db)
+        binding.setVariable("jongo", jongo)
         GroovyShell shell = new GroovyShell(binding)
 
         if (db.migrations.findOne(id: changelog.filename)) {

@@ -6,11 +6,10 @@ import grails.util.Environment
 class RunnerIntegrationSpec extends IntegrationSpec {
 
     def db
+    def mongo //injected by mongodb plugin
     def grailsApplication
 
     def setup() {
-
-        def mongo = grailsApplication.getMainContext().getBean("mongo")
         def databaseName = grailsApplication.config.grails.mongo.databaseName as String
         db = mongo.getDB(databaseName)
 

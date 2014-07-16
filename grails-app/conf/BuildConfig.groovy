@@ -52,7 +52,8 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        compile ":mongodb:3.0.1"
-        compile ":mongodb-create-drop:1.0.1"
+        test ":mongodb:3.0.1"
+
+        build ":mongodb-create-drop:1.0.1"
     }
 }
