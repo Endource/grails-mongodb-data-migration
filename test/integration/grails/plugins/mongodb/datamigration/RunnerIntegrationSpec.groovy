@@ -85,4 +85,14 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             runner.execute()
     }
 
+    void "can parse json and insert as a document"() {
+
+        given:
+            Runner runner = new Runner()
+            runner.setRunlist("classpath:/resources/a/jsonmigration.json")
+
+        expect:
+            runner.execute()
+    }
+
 }

@@ -1,0 +1,7 @@
+{
+    "changelogs": [
+
+        { "filename": "json", "author": "shin", "description": "test that json can be parsed"}
+
+    ]
+}

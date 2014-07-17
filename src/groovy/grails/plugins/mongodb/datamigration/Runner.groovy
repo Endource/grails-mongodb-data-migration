@@ -63,6 +63,7 @@ class Runner {
         Jongo jongo = new Jongo(db);
         binding.setVariable("db", db)
         binding.setVariable("jongo", jongo)
+        binding.setVariable("JSON", com.mongodb.util.JSON)
         GroovyShell shell = new GroovyShell(binding)
 
         if (db.migrations.findOne(id: changelog.filename)) {
@@ -78,7 +79,7 @@ class Runner {
 
                 } catch(Exception e) {
                     log.error("Changelog (${migrationsPath}/${changelog.filename}) failed: ${e.message}")
-                    e.printStackTrace()
+                    throw e
                 }
             }
         }

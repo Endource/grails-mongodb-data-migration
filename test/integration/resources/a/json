@@ -1,0 +1,8 @@
+def json = '''{
+                  "_id" : "52fb88bfe4b0e363ba250dea",
+                  "brand" : ObjectId("52fb8a6be4b0e363ba250dee")
+              }'''
+
+def obj = JSON.parse(json)
+
+db.product.insert(obj)
