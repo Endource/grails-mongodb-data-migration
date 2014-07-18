@@ -67,7 +67,7 @@ class Runner {
 
         def time = 0
 
-        while (db.migrations.findOne(name: 'lock') && time <= timeout) {
+        while (lockExists() && time <= timeout) {
 
             log.info("Migrations lock detected. Sleeping for 5s. Total time ${time}s")
 
@@ -84,14 +84,18 @@ class Runner {
         }
     }
 
+    protected boolean lockExists() {
+        return db.migrations_lock.findOne(name: 'lock')
+    }
+
     protected void insertLock() {
-        db.migrations.insert(name: 'lock', lockedAt: new Date())
+        db.migrations_lock.insert(name: 'lock', lockedAt: new Date())
         log.info("Inserting migrations lock")
     }
 
     protected void releaseLock() {
-        db.migrations.remove(name: 'lock')
-        assert !db.migrations.findOne(name: 'lock')
+        db.migrations_lock.remove(name: 'lock')
+        assert !db.migrations_lock.findOne(name: 'lock')
         log.info("Removed migrations lock")
     }
 

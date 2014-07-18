@@ -14,6 +14,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
         db = mongo.getDB(databaseName)
 
         db.migrations.drop()
+        db.migrations_lock.drop()
         db.cities.drop()
     }
 
@@ -117,6 +118,10 @@ class RunnerIntegrationSpec extends IntegrationSpec {
         then: "at least 3s has elapsed"
             def end = new Date().time
             (end - start) > 3000
+
+        and: "lock has been removed"
+            !db.migrations_lock.findOne(name: 'lock')
+
     }
 
     void "Migration timesout"() {
