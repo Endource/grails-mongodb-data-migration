@@ -12,6 +12,7 @@ class Runner {
 
     def migrationsPath
     def runlist
+    def timeout
 
     def environment
     def grailsApplication
@@ -27,8 +28,13 @@ class Runner {
         grailsApplication = Holders.getGrailsApplication()
         grailsResourceLocator = grailsApplication.getMainContext().getBean("grailsResourceLocator")
 
+        def mongo = grailsApplication.getMainContext().getBean("mongo")
+        def databaseName = grailsApplication.config.grails.mongo.databaseName as String
+        db = mongo.getDB(databaseName)
+
         runlist = "classpath:/migrations/datamigration.json"
         migrationsPath = runlist.substring(0, runlist.lastIndexOf("/"))
+        timeout = grailsApplication.config.grails.plugin.mongodb.datamigration.timeout ?: 120
 
         if (grailsApplication.config.grails.plugin.mongodb.datamigration.updateOnStart) {
             log.info("MongoDB data migration enabled - running migrations....")
@@ -46,15 +52,47 @@ class Runner {
 
     public void execute() {
 
-        def mongo = grailsApplication.getMainContext().getBean("mongo")
-        def databaseName = grailsApplication.config.grails.mongo.databaseName as String
-        db = mongo.getDB(databaseName)
+        lockOrWait()
 
         ChangeLog[] changelogs = getChangelogs()
 
         changelogs.each { ChangeLog changelog ->
             invokeChangeLog(changelog)
         }
+
+        releaseLock()
+    }
+
+    protected void lockOrWait() {
+
+        def time = 0
+
+        while (db.migrations.findOne(name: 'lock') && time <= timeout) {
+
+            log.info("Migrations lock detected. Sleeping for 5s. Total time ${time}s")
+
+            sleep(5000)
+
+            time += 5
+        }
+
+        if (time > timeout) {
+            log.error("Timeout waiting for data migration lock")
+            throw new Exception("Timeout waiting for data migration lock")
+        } else {
+            insertLock()
+        }
+    }
+
+    protected void insertLock() {
+        db.migrations.insert(name: 'lock', lockedAt: new Date())
+        log.info("Inserting migrations lock")
+    }
+
+    protected void releaseLock() {
+        db.migrations.remove(name: 'lock')
+        assert !db.migrations.findOne(name: 'lock')
+        log.info("Removed migrations lock")
     }
 
     protected void invokeChangeLog(ChangeLog changelog) {
@@ -66,7 +104,7 @@ class Runner {
         binding.setVariable("JSON", com.mongodb.util.JSON)
         GroovyShell shell = new GroovyShell(binding)
 
-        if (db.migrations.findOne(id: changelog.filename)) {
+        if (db.migrations.findOne(name: changelog.filename)) {
             log.info("Changelog exists: ${changelog.filename}")
         } else {
             if (changelog.context == 'default' || environment.name.toLowerCase() == changelog.context) {
@@ -74,7 +112,7 @@ class Runner {
                 try {
                     shell.evaluate(grailsResourceLocator.findResourceForURI("${migrationsPath}/${changelog.filename}").inputStream.text)
 
-                    db.migrations.insert(id: changelog.filename, author: changelog.author, context: changelog.context, description: changelog.description)
+                    db.migrations.insert(name: changelog.filename, author: changelog.author, context: changelog.context, description: changelog.description)
                     log.info("Changelog inserted: ${changelog.filename}")
 
                 } catch(Exception e) {

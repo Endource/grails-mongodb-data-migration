@@ -95,4 +95,44 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             runner.execute()
     }
 
+    void "Application will wait until lock is released"() {
+
+        given: "two runners, one with the lock"
+            Runner runnerA = new Runner()
+            Runner runnerB = new Runner()
+
+        and: "An existing lock on the database"
+            runnerA.insertLock()
+
+        when: "start the clock"
+            def start = new Date().time
+            Thread.start {
+                sleep(5000)
+                runnerA.releaseLock()
+            }
+
+        and: "start the runner not holding the lock"
+            runnerB.execute()
+
+        then: "at least 3s has elapsed"
+            def end = new Date().time
+            (end - start) > 3000
+    }
+
+    void "Migration timesout"() {
+
+        given:
+            Runner runner = new Runner()
+            runner.timeout = 1
+
+        when:
+            runner.insertLock()
+        and:
+            runner.execute()
+
+        then:
+            thrown Exception
+
+    }
+
 }

@@ -11,7 +11,8 @@ class MongodbDataMigrationGrailsPlugin {
         "grails-app/views/error.gsp"
     ]
 
-    def loadAfter = ['mongodb-create-drop']
+    def dependsOn = [mongodb: "* > 3.0"]
+    def loadAfter = ['mongodb-create-drop', 'mongodb']
 
     // TODO Fill in these fields
     def title = "Mongodb Data Migration Plugin" // Headline display name of the plugin

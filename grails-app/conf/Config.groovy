@@ -24,3 +24,10 @@ log4j = {
 }
 
 grails.plugin.mongodb.datamigration.updateOnStart = false
+grails.plugin.mongodb.datamigration.timeout = 120 //seconds
+
+environments {
+    development {
+        grails.plugin.mongodb.datamigration.updateOnStart = true
+    }
+}
