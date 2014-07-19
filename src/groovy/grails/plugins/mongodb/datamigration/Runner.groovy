@@ -104,7 +104,11 @@ class Runner {
         Binding binding = new Binding();
         Jongo jongo = new Jongo(db);
         binding.setVariable("db", db)
-        binding.setVariable("jongo", jongo)
+
+        if (org.jongo.Jongo) {
+            binding.setVariable("jongo", jongo)
+        }
+
         binding.setVariable("JSON", com.mongodb.util.JSON)
         GroovyShell shell = new GroovyShell(binding)
 

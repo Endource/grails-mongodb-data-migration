@@ -9,3 +9,5 @@ grails-mongodb-data-migration
 - Config.groovy needs grails.plugin.mongodb.datamigration.updateOnStart=true
 
 - info 'grails.plugins.mongodb.datamigration.Runner'
+
+- possible to use jongo (is in the binding) but we don't test or use it much

@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // runtime 'mysql:mysql-connector-java:5.1.27'
 
-        compile "org.jongo:jongo:1.0"
+        test "org.jongo:jongo:1.0"
 
     }
 
@@ -52,7 +52,7 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        test ":mongodb:3.0.1"
+        runtime ":mongodb:3.0.1"
 
         build ":mongodb-create-drop:1.0.1"
     }
