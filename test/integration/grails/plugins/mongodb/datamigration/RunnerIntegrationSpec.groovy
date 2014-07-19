@@ -138,6 +138,9 @@ class RunnerIntegrationSpec extends IntegrationSpec {
         then:
             thrown Exception
 
+        and: "clean up"
+            db.migrations_lock.drop()
+
     }
 
 }
