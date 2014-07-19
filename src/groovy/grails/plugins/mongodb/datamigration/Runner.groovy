@@ -4,7 +4,6 @@ import grails.util.Environment
 import grails.util.Holders
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.core.io.ResourceLocator
-import org.jongo.Jongo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -102,12 +101,7 @@ class Runner {
     protected void invokeChangeLog(ChangeLog changelog) {
 
         Binding binding = new Binding();
-        Jongo jongo = new Jongo(db);
         binding.setVariable("db", db)
-
-        if (org.jongo.Jongo) {
-            binding.setVariable("jongo", jongo)
-        }
 
         binding.setVariable("JSON", com.mongodb.util.JSON)
         GroovyShell shell = new GroovyShell(binding)

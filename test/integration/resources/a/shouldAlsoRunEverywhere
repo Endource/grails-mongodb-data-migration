@@ -1,4 +1,1 @@
-
-def cities = jongo.getCollection("cities")
-
-cities.insert("{name: 'Birmingham'}")
+db.cities.insert(name: "Birmingham")
