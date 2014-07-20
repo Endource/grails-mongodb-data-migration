@@ -2,7 +2,7 @@
     "changelogs": [
 
         { "filename": "shouldRunEverywhere", "author": "shin", "description": "this changelog should execute everywhere"},
-        { "filename": "shouldAlsoRunEverywhere", "author": "shin", "description": "this changelog should also execute everywhere", "context": "default"},
+        { "filename": "migrationTestPhase", "author": "shin", "description": "this changelog should also execute everywhere", "context": "default"},
         { "filename": "shouldOnlyRunInTest", "author": "shin", "description": "this changelog should only run in grails.env=test", "context": "test"}
 
     ]

@@ -1,0 +1,7 @@
+{
+    "changelogs": [
+
+        { "filename": "migrationTestPhase", "author": "shin", "description": "this changelog should also execute everywhere", "context": "default"}
+
+    ]
+}
