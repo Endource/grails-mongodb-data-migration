@@ -9,8 +9,8 @@ eventTestPhasesStart = { phasesToRun ->
     }
 
     /**
-     * Creates a new test phase and type called migrations so migration tests can be called as:
-     * "grails test-app migrations:migrations" or just "grails test-app migrations:"
+     * Creates a new test phase and type called migration so migration tests can be called as:
+     * "grails test-app migration:migration" or just "grails test-app migration:"
      *
      * Don't ask me how this stuff works, this was cobbled together with examples on stackoverflow and plugin source code.
      */
@@ -20,17 +20,17 @@ eventTestPhasesStart = { phasesToRun ->
     def testTypeName = "migration"
     def testDirectory = "migration"
 
-    def migrationsPhaseConfigurer = new IntegrationTestPhaseConfigurer(projectTestRunner.projectTestCompiler, projectLoader)
+    def migrationPhaseConfigurer = new IntegrationTestPhaseConfigurer(projectTestRunner.projectTestCompiler, projectLoader)
 
-    projectTestRunner.testFeatureDiscovery.configurers.migrations = migrationsPhaseConfigurer
+    projectTestRunner.testFeatureDiscovery.configurers.migration = migrationPhaseConfigurer
 
-    def migrationsTestType = new GrailsSpecTestType(testTypeName, testDirectory)
+    def migrationTestType = new GrailsSpecTestType(testTypeName, testDirectory)
 
-    projectTestRunner.testFeatureDiscovery.testExecutionContext.migrationsTests = [migrationsTestType]
+    projectTestRunner.testFeatureDiscovery.testExecutionContext.migrationTests = [migrationTestType]
 
 }
 
-migrationsTestPhasePreparation = {
+migrationTestPhasePreparation = {
     // called at the start of the phase
     println "*** Starting migration tests"
     integrationTestPhasePreparation()
