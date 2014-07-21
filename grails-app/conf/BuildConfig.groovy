@@ -49,7 +49,9 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        runtime ":mongodb:3.0.1"
+        runtime (":mongodb:3.0.1") {
+            export = false
+        }
 
         build (":mongodb-create-drop:1.0.1") {
             excludes "mongodb"
