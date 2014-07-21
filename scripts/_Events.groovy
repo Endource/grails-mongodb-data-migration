@@ -15,10 +15,10 @@ eventTestPhasesStart = { phasesToRun ->
      * Don't ask me how this stuff works, this was cobbled together with examples on stackoverflow and plugin source code.
      */
 
-    phasesToRun << "migrations"
+    phasesToRun << "migration"
 
-    def testTypeName = "migrations"
-    def testDirectory = "migrations"
+    def testTypeName = "migration"
+    def testDirectory = "migration"
 
     def migrationsPhaseConfigurer = new IntegrationTestPhaseConfigurer(projectTestRunner.projectTestCompiler, projectLoader)
 
@@ -32,6 +32,6 @@ eventTestPhasesStart = { phasesToRun ->
 
 migrationsTestPhasePreparation = {
     // called at the start of the phase
-    println "*** Starting migrations tests"
+    println "*** Starting migration tests"
     integrationTestPhasePreparation()
 }
