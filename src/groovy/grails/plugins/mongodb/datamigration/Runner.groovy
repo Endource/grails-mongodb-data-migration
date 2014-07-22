@@ -31,7 +31,7 @@ class Runner {
         def databaseName = grailsApplication.config.grails.mongo.databaseName as String
         db = mongo.getDB(databaseName)
 
-        runlist = "classpath:/migrations/datamigration.json"
+        runlist = "classpath:/migration/datamigration.json"
         migrationsPath = runlist.substring(0, runlist.lastIndexOf("/"))
         timeout = grailsApplication.config.grails.plugin.mongodb.datamigration.timeout ?: 120
 
