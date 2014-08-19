@@ -2,6 +2,7 @@ package grails.plugins.mongodb.datamigration
 
 import grails.test.spock.IntegrationSpec
 import grails.util.Environment
+import spock.lang.IgnoreRest
 
 class RunnerIntegrationSpec extends IntegrationSpec {
 
@@ -22,7 +23,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
 
         given:
             Runner runner = new Runner()
-            runner.setRunlist("classpath:/resources/a/migrationTestPhase.json")
+            runner.setRunlist("classpath:/resources/a/datamigration.json")
 
         when: "we read the runlist at integration/resources/a/"
             def changelogs = runner.getChangelogs()
@@ -39,7 +40,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
 
         given:
             Runner runner = new Runner()
-            runner.setRunlist("classpath:/resources/a/migrationTestPhase.json")
+            runner.setRunlist("classpath:/resources/a/datamigration.json")
             runner.environment = Environment.TEST
 
         when:
@@ -58,7 +59,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
 
         given:
             Runner runner = new Runner()
-            runner.setRunlist("classpath:/resources/a/migrationTestPhase.json")
+            runner.setRunlist("classpath:/resources/a/datamigration.json")
             runner.environment = Environment.PRODUCTION
 
         when:
