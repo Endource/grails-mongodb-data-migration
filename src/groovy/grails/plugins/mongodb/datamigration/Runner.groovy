@@ -145,6 +145,7 @@ class Runner {
         changelogsJson.each {
 
             if (it.filename) {
+                log.debug("New changelog: ${it.filename}")
                 changelogs << new ChangeLog(filename: it.filename, author: it.author ?: "anonymous", description: it.description ?: "no description", context: it.context ?: "default")
             } else {
                 log.error("Filename missing for entry: ${it}")

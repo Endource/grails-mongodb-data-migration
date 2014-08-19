@@ -15,7 +15,7 @@ eventTestPhasesStart = { phasesToRun ->
      * Don't ask me how this stuff works, this was cobbled together with examples on stackoverflow and plugin source code.
      */
 
-    phasesToRun << "migration"
+//    phasesToRun << "migration"
 
     def testTypeName = "migration"
     def testDirectory = "migration"
