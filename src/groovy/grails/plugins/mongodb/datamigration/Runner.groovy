@@ -53,13 +53,15 @@ class Runner {
 
         lockOrWait()
 
-        ChangeLog[] changelogs = getChangelogs()
+        try {
+            ChangeLog[] changelogs = getChangelogs()
 
-        changelogs.each { ChangeLog changelog ->
-            invokeChangeLog(changelog)
+            changelogs.each { ChangeLog changelog ->
+                invokeChangeLog(changelog)
+            }
+        } finally {
+            releaseLock()
         }
-
-        releaseLock()
     }
 
     protected void lockOrWait() {
