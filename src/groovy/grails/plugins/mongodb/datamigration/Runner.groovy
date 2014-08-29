@@ -104,7 +104,7 @@ class Runner {
         binding.setVariable("db", db)
 
         binding.setVariable("JSON", com.mongodb.util.JSON)
-        GroovyShell shell = new GroovyShell(binding)
+        GroovyShell shell = new GroovyShell(this.class.classLoader, binding)
 
         if (db.migrations.findOne(name: changelog.filename)) {
             log.info("Changelog exists: ${changelog.filename}")
