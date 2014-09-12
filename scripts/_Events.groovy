@@ -15,7 +15,9 @@ eventTestPhasesStart = { phasesToRun ->
      * Don't ask me how this stuff works, this was cobbled together with examples on stackoverflow and plugin source code.
      */
 
-//    phasesToRun << "migration"
+    if (argsMap['migration'] || argsMap.params.contains('migration:')) {
+        phasesToRun << "migration"
+    }
 
     def testTypeName = "migration"
     def testDirectory = "migration"
