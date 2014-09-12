@@ -3,7 +3,7 @@ import grails.util.Holders
 
 class MongodbDataMigrationGrailsPlugin {
     // the plugin version
-    def version = "0.2"
+    def version = "0.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.3 > *"
     // resources that are excluded from plugin packaging
