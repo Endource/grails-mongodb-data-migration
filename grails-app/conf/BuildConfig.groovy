@@ -44,17 +44,16 @@ grails.project.dependency.resolution = {
 
         build ':tomcat:7.0.52.1'
 
-        build(":release:3.0.1",
-              ":rest-client-builder:1.0.3") {
+        build(":release:3.1.2") {
             export = false
         }
 
-        runtime (":mongodb:3.0.1") {
+        runtime (":mongodb:5.0.5.RELEASE") {
             export = false
         }
 
-        build (":mongodb-create-drop:1.0.2") {
-            excludes "mongodb"
-        }
+//        build (":mongodb-create-drop:1.0.2") {
+//            excludes "mongodb"
+//        }
     }
 }
