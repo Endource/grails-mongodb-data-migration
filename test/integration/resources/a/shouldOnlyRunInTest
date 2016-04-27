@@ -1,1 +1,1 @@
-db.cities.insert(name: "Cardiff")
+database['cities'].insert(name: "Cardiff")

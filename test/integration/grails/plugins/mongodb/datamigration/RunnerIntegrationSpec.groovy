@@ -1,22 +1,22 @@
 package grails.plugins.mongodb.datamigration
 
+import com.mongodb.client.MongoDatabase
 import grails.test.spock.IntegrationSpec
 import grails.util.Environment
-import spock.lang.IgnoreRest
 
 class RunnerIntegrationSpec extends IntegrationSpec {
 
-    def db
+    MongoDatabase database
     def mongo //injected by mongodb plugin
     def grailsApplication
 
     def setup() {
         def databaseName = grailsApplication.config.grails.mongo.databaseName as String
-        db = mongo.getDB(databaseName)
-
-        db.migrations.drop()
-        db.migrations_lock.drop()
-        db.cities.drop()
+        database = mongo.getDatabase(databaseName)
+        database['migrations'].drop()
+        database['migrations_lock'].drop()
+        database['cities'].drop()
+        database['product'].drop()
     }
 
     void "read a test run list"() {
@@ -47,12 +47,12 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             runner.execute()
 
         then:
-            db.migrations.count() == 3
+            database['migrations'].count() == 3
 
         and:
-            db.cities.findOne(name: "Aberdeen")
-            db.cities.findOne(name: "Birmingham")
-            db.cities.findOne(name: "Cardiff")
+            database['cities'].findOne(name: "Aberdeen")
+            database['cities'].findOne(name: "Birmingham")
+            database['cities'].findOne(name: "Cardiff")
     }
 
     void "execute a run list for grails.env=production"() {
@@ -66,11 +66,11 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             runner.execute()
 
         then:
-            db.migrations.count() == 2
+            database['migrations'].count() == 2
 
         and:
-            db.cities.findOne(name: "Aberdeen")
-            db.cities.findOne(name: "Birmingham")
+            database['cities'].findOne(name: "Aberdeen")
+            database['cities'].findOne(name: "Birmingham")
 
     }
 
@@ -121,7 +121,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             (end - start) > 3000
 
         and: "lock has been removed"
-            !db.migrations_lock.findOne(name: 'lock')
+            !database['migrations_lock'].findOne(name: 'lock')
 
     }
 
@@ -140,7 +140,7 @@ class RunnerIntegrationSpec extends IntegrationSpec {
             thrown Exception
 
         and: "clean up"
-            db.migrations_lock.drop()
+            database['migrations_lock'].drop()
 
     }
 

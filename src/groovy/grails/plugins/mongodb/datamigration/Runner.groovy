@@ -1,5 +1,7 @@
 package grails.plugins.mongodb.datamigration
 
+import com.mongodb.MongoClient
+import com.mongodb.client.MongoDatabase
 import grails.util.Environment
 import grails.util.Holders
 import groovy.json.JsonSlurper
@@ -16,8 +18,8 @@ class Runner {
     def environment
     def grailsApplication
     ResourceLocator grailsResourceLocator
-    def db
-    def mongo
+    MongoClient mongo
+    MongoDatabase database
 
     protected Logger log = LoggerFactory.getLogger(getClass())
 
@@ -27,9 +29,9 @@ class Runner {
         grailsApplication = Holders.getGrailsApplication()
         grailsResourceLocator = grailsApplication.getMainContext().getBean("grailsResourceLocator")
 
-        def mongo = grailsApplication.getMainContext().getBean("mongo")
+        mongo = grailsApplication.getMainContext().getBean("mongo")
         def databaseName = grailsApplication.config.grails.mongo.databaseName as String
-        db = mongo.getDB(databaseName)
+        database = mongo.getDatabase(databaseName)
 
         runlist = "classpath:/migration/datamigration.json"
         migrationsPath = runlist.substring(0, runlist.lastIndexOf("/"))
@@ -86,29 +88,29 @@ class Runner {
     }
 
     protected boolean lockExists() {
-        return db.migrations_lock.findOne(name: 'lock')
+        return database['migrations_lock'].findOne(name: 'lock')
     }
 
     protected void insertLock() {
-        db.migrations_lock.insert(name: 'lock', lockedAt: new Date())
+        database['migrations_lock'].insert(name: 'lock', lockedAt: new Date())
         log.info("Inserting migrations lock")
     }
 
     protected void releaseLock() {
-        db.migrations_lock.remove(name: 'lock')
-        assert !db.migrations_lock.findOne(name: 'lock')
+        database['migrations_lock'].remove(name: 'lock')
+        assert !database['migrations_lock'].findOne(name: 'lock')
         log.info("Removed migrations lock")
     }
 
     protected void invokeChangeLog(ChangeLog changelog) {
 
         Binding binding = new Binding();
-        binding.setVariable("db", db)
+        binding.setVariable("database", database)
 
         binding.setVariable("JSON", com.mongodb.util.JSON)
-        GroovyShell shell = new GroovyShell(this.class.classLoader, binding)
+        GroovyShell shell = new GroovyShell(database.class.classLoader, binding)
 
-        if (db.migrations.findOne(name: changelog.filename)) {
+        if (database['migrations'].findOne(name: changelog.filename)) {
             log.info("Changelog exists: ${changelog.filename}")
         } else {
             if (changelog.context == 'default' || environment.name.toLowerCase() == changelog.context) {
@@ -116,7 +118,7 @@ class Runner {
                 try {
                     shell.evaluate(grailsResourceLocator.findResourceForURI("${migrationsPath}/${changelog.filename}").inputStream.text)
 
-                    db.migrations.insert(name: changelog.filename, author: changelog.author, context: changelog.context, description: changelog.description)
+                    database['migrations'].insert(name: changelog.filename, author: changelog.author, context: changelog.context, description: changelog.description)
                     log.info("Changelog inserted: ${changelog.filename}")
 
                 } catch(Exception e) {

@@ -1,20 +1,21 @@
 package grails.plugins.mongodb.datamigration
 
+import com.mongodb.MongoClient
 import grails.test.spock.IntegrationSpec
 
 class MigrationsTestPhaseSpec extends IntegrationSpec {
 
-    def db
-    def mongo //injected by mongodb plugin
+    def database
+    MongoClient mongo //injected by mongodb plugin
     def grailsApplication
 
     def setup() {
         def databaseName = grailsApplication.config.grails.mongo.databaseName as String
-        db = mongo.getDB(databaseName)
+        database = mongo.getDatabase(databaseName)
 
-        db.migrations.drop()
-        db.migrations_lock.drop()
-        db.cities.drop()
+        database.migrations.drop()
+        database.migrations_lock.drop()
+        database.cities.drop()
     }
 
     void "Migrations test phase"() {
@@ -27,7 +28,7 @@ class MigrationsTestPhaseSpec extends IntegrationSpec {
             runner.execute()
 
         then:
-            db.cities.findOne(name: "Zagreb")
+            database.cities.findOne(name: "Zagreb")
     }
 
 }
